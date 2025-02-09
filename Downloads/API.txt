@@ -1,45 +1,139 @@
-#student management system
+# Student Management System
 openapi: 3.0.3
 info:
   title: Open API Specification for Student Management System
   version: '1.1'
-externaldocs:
+externalDocs:
   description: Information about students of CUET
-  url: http//mycollege.com/api
+  url: http://mycollege.com/api
+
 servers:
-  - url: http//localhost:44333/api
-  - url: http//localhost:{port}/stagingapi
-  variables:
-    port:
-    enum:
-      - '44333'
-      - '8090'
-    default: !!str 44333
+  - url: http://localhost:44333/api
+  - url: http://localhost:{port}/stagingapi
+    variables:
+      port:
+        enum:
+          - '44333'
+          - '8090'
+        default: '44333'
+
+components:
+  securitySchemes:
+    BearerAuth:  # Defines Bearer Token authentication
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # (Optional) Specifies JWT format
+
 tags:
-   - name: Student
-  description: Operations about students of CUET
+  - name: Student
+    description: Operations about students of CUET
+
 paths:
   /students:
-    post: 
-      summary: adds a new user to the system.
+    post:
+      summary: Adds a new user to the system.
+      security:
+        - BearerAuth: []  # Requires authentication
+
       requestBody:
         required: true
         content:
           application/json:
-          schema:
-            type: object
-            properties:
-              student_id:
-                type: int
-              name:
-                type: string 
-              email:
-                type: email
-              address:
-                type: string
+            schema:
+              type: object
+              properties:
+                student_id:
+                  type: integer
+                name:
+                  type: string 
+                email:
+                  type: string
+                  format: email
+                address:
+                  type: string
+
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Student added successfully
+        "400":
+          description: Invalid request data
+        "401":
+          description: Unauthorized - Missing or invalid token
+        "403":
+          description: Forbidden - User does not have permission
+        "409":
+          description: Conflict - User already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Student ID already exists
+        "500":
+          description: Server error
+
+# Global security (optional) - Requires authentication for all APIs unless overridden
+security:
+  - BearerAuth: []
+
+
+
+
+
+
+####without authentication
+openapi: 3.0.3
+info:
+  title: Open API Specification for Student Management System
+  version: '1.1'
+externalDocs:
+  description: Information about students of CUET
+  url: http://mycollege.com/api
+servers:
+  - url: http://localhost:44333/api
+  - url: http://localhost:{port}/stagingapi
+    variables:
+      port:
+        enum:
+          - '44333'
+          - '8090'
+        default: '44333'
+tags:
+  - name: Student
+    description: Operations about students of CUET
+paths:
+  /students:
+    post:
+      summary: Adds a new user to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                student_id:
+                  type: integer
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                address:
+                  type: string
       responses:
         "200":
-          description: user created successfully
+          description: User created successfully
           content:
             application/json:
               schema:
@@ -49,40 +143,23 @@ paths:
                     type: string
         "400":
           description: Invalid request data
-        '409':
-          description: Conflict -User already exists
+        "409":
+          description: Conflict - User already exists
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   message:
-                    type: String
+                    type: string
         "404":
           description: Server error
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-              
-  
+
+
+
+
+
+
+just checking
+
+
