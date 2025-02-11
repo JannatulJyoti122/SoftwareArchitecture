@@ -1,0 +1,65 @@
+#student management system
+openapi: 3.0.3
+info:
+  title: Open API Specification for Student Management System
+  version: '1.1'
+externaldocs:
+  description: Information about students of CUET
+  url: http//mycollege.com/api
+servers:
+  - url: http//localhost:44333/api
+  - url: http//localhost:{port}/stagingapi
+  variables:
+    port:
+    enum:
+      - '44333'
+      - '8090'
+    default: !!str 44333
+tags:
+   - name: Student
+  description: Operations about students of CUET
+paths:
+  /students:
+    post: 
+      summary: adds a new user to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+          schema:
+            type: object
+            properties:
+              student_id:
+                type: int
+              name:
+                type: string 
+              email:
+                type: email
+              address:
+                type: string
+      responses:
+        "200":
+          description: user created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: Invalid request data
+        '409':
+          description: Conflict -User already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: String
+        "404":
+          description: Server error
+          
+          
+     
